@@ -1,0 +1,26 @@
+--- AccountEditDialog.java
++++ AccountEditDialog.java
+@@ -47,23 +47,6 @@ protected void onRender(Element parent, int pos) {
+         accountNameLabel.setValue(selectedAccount.getName());
+         accountNameField.setValue(selectedAccount.getName());
+ 
+-        if (selectedAccount.getParentAccountId() != null) {
+-            GWT_ACCOUNT_SERVICE.find(selectedAccount.getParentAccountId(), new AsyncCallback<GwtAccount>() {
+-
+-                @Override
+-                public void onSuccess(GwtAccount result) {
+-                    if (parentAccountNameLabel != null) {
+-                        parentAccountNameLabel.setValue(result.getName());
+-                    }
+-                }
+-
+-                @Override
+-                public void onFailure(Throwable caught) {
+-                    caught.printStackTrace();
+-                }
+-            });
+-        }      
+-
+         expirationDateField.setValue(selectedAccount.getExpirationDate());
+         expirationDateField.setOriginalValue(selectedAccount.getExpirationDate());
+ 

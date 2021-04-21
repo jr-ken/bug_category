@@ -1,0 +1,436 @@
+--- build.sh
++++ build.sh
+@@ -1,3 +1,4 @@
+-docker build . -f Dockerfile.deps -t yorek/iotedgedev-deps:ubuntu
++export VERSION=$1
++docker build -f Dockerfile.deps -t jongallant/iotedgedev-deps:$1 -t jongallant/iotedgedev-deps:$1-linux -t jongallant/iotedgedev-deps:latest -t jongallant/iotedgedev-deps:latest-linux   . 
+ cat Dockerfile | envsubst > Dockerfile.expanded
+-docker build . -f Dockerfile.expanded -t yorek/iotedgedev:ubuntu
++docker build -f Dockerfile.expanded -t jongallant/iotedgedev:$1 -t jongallant/iotedgedev:$1-linux -t jongallant/iotedgedev:latest -t jongallant/iotedgedev:latest-linux .
+--- build.sh
++++ build.sh
+@@ -1,3 +0,0 @@
+-#!/bin/bash
+-export VERSION=$1
+-docker build -f Dockerfile -t microsoft/iotedgedev:$1 -t microsoft/iotedgedev:$1-nanoserver -t microsoft/iotedgedev:latest-nanoserver .
+--- build.sh
++++ build.sh
+@@ -1,73 +0,0 @@
+-#!/bin/bash
+-
+-# read IoTEdgeDev version from python __init__ file
+-export VERSION=$(cat ../iotedgedev/__init__.py | grep '__version__' | grep -oP "'\K[^']+")
+-
+-PYTHON2="2.7.14"
+-PYTHON3="3.6.5"
+-
+-function switch_docker
+-{
+-    echo "===== Switching Docker engine"
+-    echo "===== From: " $(docker version --format '{{.Server.Os}}')
+-    /c/Program\ Files/Docker/Docker/DockerCli.exe -SwitchDaemon
+-    echo "===== To: " $(docker version --format '{{.Server.Os}}')
+-}
+-
+-function get_docker_mode
+-{
+-    echo $(docker version --format '{{.Server.Os}}')
+-}
+-
+-function check_docker_expected_mode 
+-{
+-    local mode=$(get_docker_mode)    
+-
+-    if [ $mode != $1 ]; then
+-        echo "===== ERROR: docker is not in expected mode: '$1'"
+-        exit 1
+-    fi    
+-}
+-
+-function build_linux
+-{
+-    echo "===== Building Linux Based images"
+-
+-    check_docker_expected_mode "linux"
+-
+-    cd linux
+-    docker build -f Dockerfile -t microsoft/iotedgedev:$VERSION-linux -t microsoft/iotedgedev:latest-linux .
+-
+-    cd ..
+-}
+-
+-function build_windows
+-{
+-    echo "===== Building Windows Based images"
+-    
+-    check_docker_expected_mode "windows"
+-
+-    cd windows
+-
+-    echo "===== Building Windows Based image (Python $PYTHON3)"
+-    docker build --build-arg PYTHON_VERSION=$PYTHON3 -f Dockerfile -t microsoft/iotedgedev:$VERSION-windows -t microsoft/iotedgedev:latest-windows -t microsoft/iotedgedev:$VERSION-windows-py3 -t microsoft/iotedgedev:latest-windows-py3 .
+-
+-    cd ..
+-}
+-
+-mode=$(get_docker_mode)
+-echo "===== Docker is in '$mode' container mode"
+-if [ $mode = "windows" ]; then
+-    # Docker is in Windows Container mode
+-    build_windows
+-    switch_docker
+-    build_linux
+-    switch_docker
+-else
+-    # Docker is in Linux Container mode
+-    build_linux
+-    switch_docker
+-    build_windows
+-    switch_docker
+-fi
+-
+--- build.sh
++++ build.sh
+@@ -48,7 +48,9 @@ function build_windows
+     check_docker_expected_mode "windows"
+ 
+     cd windows
+-    docker build --build-arg PYTHON2_VERSION=$PYTHON2 --build-arg PYTHON3_VERSION=$PYTHON3 -f Dockerfile -t microsoft/iotedgedev:$VERSION-windows -t microsoft/iotedgedev:latest-windows .
++
++    echo "===== Building Windows Based image (Python $PYTHON3)"
++    docker build --build-arg PYTHON_VERSION=$PYTHON3 -f Dockerfile -t microsoft/iotedgedev:$VERSION-windows -t microsoft/iotedgedev:latest-windows -t microsoft/iotedgedev:$VERSION-windows-py3 -t microsoft/iotedgedev:latest-windows-py3 .
+ 
+     cd ..
+ }
+--- build.sh
++++ build.sh
+@@ -6,9 +6,6 @@ export VERSION=$(cat ../iotedgedev/__init__.py | grep '__version__' | grep -oP "
+ PYTHON2="2.7.14"
+ PYTHON3="3.6.5"
+ 
+-build_linux=1
+-build_windows=1
+-
+ function switch_docker
+ {
+     echo "===== Switching Docker engine"
+@@ -56,42 +53,19 @@ function build_windows
+     cd ..
+ }
+ 
+-if [ $1 = "--help" ]; then    
+-    echo "Usage:"
+-    echo "build.sh [linux|windows]"
+-    exit 1
+-fi
+-
+-if [ $1 = "linux" ]; then
+-    build_windows=0
+-    echo "===== Building Linux image only"
+-fi
+-
+-if [ $1 = "windows" ]; then
+-    build_linux=0
+-    echo "===== Building Windows image only"
+-fi
+-
+ mode=$(get_docker_mode)
+ echo "===== Docker is in '$mode' container mode"
+ if [ $mode = "windows" ]; then
+     # Docker is in Windows Container mode
+-    if [ $build_windows = "1" ]; then
+-        build_windows
+-    fi
+-    if [ $build_linux = "1" ]; then
+-        switch_docker
+-        build_linux
+-        switch_docker
+-    fi
++    build_windows
++    switch_docker
++    build_linux
++    switch_docker
+ else
+     # Docker is in Linux Container mode
+-    if [ $build_linux -eq "1" ]; then    
+-        build_linux
+-    fi
+-    if [ $build_windows -eq "1" ]; then    
+-        switch_docker
+-        build_windows
+-        switch_docker
+-    fi
+-fi+    build_linux
++    switch_docker
++    build_windows
++    switch_docker
++fi
++
+--- build.sh
++++ build.sh
+@@ -39,12 +39,7 @@ function build_linux
+     check_docker_expected_mode "linux"
+ 
+     cd linux
+-    docker build \
+-        -f Dockerfile \
+-        --no-cache \
+-        -t microsoft/iotedgedev:$VERSION-linux \
+-        -t microsoft/iotedgedev:latest-linux \
+-        .
++    docker build -f Dockerfile -t microsoft/iotedgedev:$VERSION-linux -t microsoft/iotedgedev:latest-linux .
+ 
+     cd ..
+ }
+@@ -56,38 +51,25 @@ function build_windows
+     check_docker_expected_mode "windows"
+ 
+     cd windows
+-    docker build \
+-        --build-arg PYTHON2_VERSION=$PYTHON2 \
+-        --build-arg PYTHON3_VERSION=$PYTHON3 \
+-        -f Dockerfile \
+-        --no-cache \
+-        -t microsoft/iotedgedev:$VERSION-windows \
+-        -t microsoft/iotedgedev:latest-windows \
+-        .
++    docker build --build-arg PYTHON2_VERSION=$PYTHON2 --build-arg PYTHON3_VERSION=$PYTHON3 -f Dockerfile -t microsoft/iotedgedev:$VERSION-windows -t microsoft/iotedgedev:latest-windows .
+ 
+     cd ..
+ }
+ 
+-if [ ! -z "$1" ];  then
+-    if [ "$1" = "--help" ]; then    
+-        echo "Usage:"
+-        echo "build.sh [linux|windows]"
+-        exit 1
+-    fi
++if [ $1 = "--help" ]; then    
++    echo "Usage:"
++    echo "build.sh [linux|windows]"
++    exit 1
++fi
++
++if [ $1 = "linux" ]; then
++    build_windows=0
++    echo "===== Building Linux image only"
++fi
+ 
+-    if [ "$1" = "linux" ]; then
+-        build_windows=0
+-        echo "===== Building Linux image only"
+-    elif [ "$1" = "windows" ]; then
+-        build_linux=0
+-        echo "===== Building Windows image only"
+-    else
+-        echo "Unknown option: $1"
+-        echo "Use --help for help"
+-        exit 1
+-    fi
+-else
+-    echo "===== Building Windows and Linux images"
++if [ $1 = "windows" ]; then
++    build_linux=0
++    echo "===== Building Windows image only"
+ fi
+ 
+ mode=$(get_docker_mode)
+--- build.sh
++++ build.sh
+@@ -39,12 +39,7 @@ function build_linux
+     check_docker_expected_mode "linux"
+ 
+     cd linux
+-    docker build \
+-        -f Dockerfile \
+-        --no-cache \
+-        -t microsoft/iotedgedev:$VERSION-linux \
+-        -t microsoft/iotedgedev:latest-linux \
+-        .
++    docker build -f Dockerfile -t microsoft/iotedgedev:$VERSION-linux -t microsoft/iotedgedev:latest-linux .
+ 
+     cd ..
+ }
+@@ -56,38 +51,25 @@ function build_windows
+     check_docker_expected_mode "windows"
+ 
+     cd windows
+-    docker build \
+-        --build-arg PYTHON2_VERSION=$PYTHON2 \
+-        --build-arg PYTHON3_VERSION=$PYTHON3 \
+-        -f Dockerfile \
+-        --no-cache \
+-        -t microsoft/iotedgedev:$VERSION-windows \
+-        -t microsoft/iotedgedev:latest-windows \
+-        .
++    docker build --build-arg PYTHON2_VERSION=$PYTHON2 --build-arg PYTHON3_VERSION=$PYTHON3 -f Dockerfile -t microsoft/iotedgedev:$VERSION-windows -t microsoft/iotedgedev:latest-windows .
+ 
+     cd ..
+ }
+ 
+-if [ ! -z "$1" ];  then
+-    if [ "$1" = "--help" ]; then    
+-        echo "Usage:"
+-        echo "build.sh [linux|windows]"
+-        exit 1
+-    fi
++if [ $1 = "--help" ]; then    
++    echo "Usage:"
++    echo "build.sh [linux|windows]"
++    exit 1
++fi
++
++if [ $1 = "linux" ]; then
++    build_windows=0
++    echo "===== Building Linux image only"
++fi
+ 
+-    if [ "$1" = "linux" ]; then
+-        build_windows=0
+-        echo "===== Building Linux image only"
+-    elif [ "$1" = "windows" ]; then
+-        build_linux=0
+-        echo "===== Building Windows image only"
+-    else
+-        echo "Unknown option: $1"
+-        echo "Use --help for help"
+-        exit 1
+-    fi
+-else
+-    echo "===== Building Windows and Linux images"
++if [ $1 = "windows" ]; then
++    build_linux=0
++    echo "===== Building Windows image only"
+ fi
+ 
+ mode=$(get_docker_mode)
+--- build.sh
++++ build.sh
+@@ -1,49 +0,0 @@
+-#!/bin/bash
+-
+-# stop on error
+-set -e
+-
+-echo "===== Checking pre-requisistes"
+-IS_ADMIN=$(powershell '([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")')
+-if [ "$IS_ADMIN" = "False" ]; then        
+-    echo "build script must be run as administrator"
+-    exit 1
+-fi
+-
+-#TODO
+-# check if running in administrator mode
+-# make sure docker is in linux mode
+-# stop and restart docker to make sure to avoid networking problem?
+-
+-echo "===== Preventive cleanup"
+-rm __pycache__ -rf
+-rm .pytest_cache -rf
+-rm .tox -rf
+-rm .pytest_cache -rf
+-rm tests/__pycache__ -rf
+-
+-echo "===== Running smoke tests"
+-#tox
+-
+-echo "===== Bumping version"
+-bumpversion minor
+-
+-echo "===== Building Python Wheel"
+-python setup.py bdist_wheel 
+-
+-echo "===== Uploading to PyPi"
+-VERSION=$(cat ./iotedgedev/__init__.py | grep '__version__' | grep -oP "'\K[^']+")
+-twine upload --repository-url https://test.pypi.org/legacy/  dist/iotedgedev-$VERSION-py2.py3-none-any.whl
+-
+-echo "===== Building Docker images"
+-cd docker
+-./build-docker.sh
+-
+-echo "===== Pushing Docker images"
+-#TODO
+-
+-echo "===== Creating Multi-Arch Docker image"
+-#TODO
+-
+-echo "===== Pushing Docker Multi-Arch image"
+-#TODO
+--- build-docker.sh
++++ build.sh
+@@ -71,7 +71,7 @@ function build_windows
+ if [ ! -z "$1" ];  then
+     if [ "$1" = "--help" ]; then    
+         echo "Usage:"
+-        echo "build-docker.sh [linux|windows]"
++        echo "build.sh [linux|windows]"
+         exit 1
+     fi
+ 
+--- build.sh
++++ build.sh
+@@ -84,15 +84,16 @@ function run_push_docker
+ }
+ 
+ 
+-#run_tox
++run_tox
+ if [ "$MODE" = "prod" ]; then
+     run_bumpversion
+ fi
+ run_build
+ #run_twine
+-run_build_docker
++#run_build_docker
+ #run_push_docker
+ 
++
+ #./docker/push-docker.sh $DOCKERHUB
+ 
+ echo -e "\n===== All done"
+--- build.sh
++++ build.sh
+@@ -8,12 +8,11 @@ function show_help
+     echo "Usage:"
+     echo "build.sh <mode>"
+     echo ""
+-    echo "mode: test|prod [windows|linux]"
++    echo "mode: test|prod"
+     exit 1
+ }
+ 
+ MODE="$1"
+-PLATFORM="$2"
+ 
+ if [ -z "$MODE" ]; then
+     show_help
+@@ -21,18 +20,14 @@ fi
+ 
+ echo -e "\n===== Setting up build environment"
+ if [ "$MODE" = "test" ]; then
+-    echo "Environment: $MODE"
++    echo "Environment: TEST"
+ elif [ "$MODE" = "prod" ]; then
+-    echo "Environment: $MODE"
++    echo "Environment: PROD"
+ else
+     echo "ERROR> Build mode parameter not known. must be 'prod' or 'test'"
+     exit 1
+ fi
+ 
+-if [ ! -z $PLATFORM ]; then
+-    echo "Platform: $PLATFORM"
+-fi
+-
+ echo -e "\n===== Checking pre-requisistes"
+ IS_ADMIN=$(powershell '([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")')
+ if [ "$IS_ADMIN" = "False" ]; then        
+@@ -80,7 +75,7 @@ function run_twine
+ 
+ function run_build_docker
+ {
+-    ./docker/build-docker.sh $PLATFORM
++    ./docker/build-docker.sh
+ }
+ 
+ function run_push_docker 

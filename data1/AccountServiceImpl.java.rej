@@ -1,0 +1,21 @@
+--- AccountServiceImpl.java
++++ AccountServiceImpl.java
+@@ -151,7 +151,6 @@ public Account update(Account account) throws KapuaException {
+         ArgumentValidator.notEmptyOrNull(account.getName(), "account.name");
+         ArgumentValidator.notNull(account.getOrganization(), "account.organization");
+         ArgumentValidator.match(account.getOrganization().getEmail(), CommonsValidationRegex.EMAIL_REGEXP, "account.organization.email");
+-        Account parentAccount = null;
+ 
+         //
+         // Check Access
+@@ -171,9 +170,7 @@ public Account update(Account account) throws KapuaException {
+         }
+ 
+         // check that expiration date is no later than parent expiration date
+-        if (oldAccount.getScopeId() != null) {
+-            parentAccount = KapuaSecurityUtils.doPrivileged(() -> find(oldAccount.getScopeId()));
+-        }
++        Account parentAccount = KapuaSecurityUtils.doPrivileged(() -> find(oldAccount.getScopeId()));
+         if (parentAccount != null && parentAccount.getExpirationDate() != null) {
+             // if parent account never expires no check is needed
+             if (account.getExpirationDate() == null || parentAccount.getExpirationDate().before(account.getExpirationDate())) {

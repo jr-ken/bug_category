@@ -1,0 +1,10 @@
+--- ClientConfigProperties.java
++++ ClientConfigProperties.java
+@@ -95,7 +95,6 @@ public ClientConfigProperties(final ClientConfigProperties otherProperties) {
+         this.flowLatency = otherProperties.flowLatency;
+         this.host = otherProperties.host;
+         this.hostnameVerificationRequired = otherProperties.hostnameVerificationRequired;
+-        this.idleTimeoutMillis = otherProperties.idleTimeoutMillis;
+         this.initialCredits = otherProperties.initialCredits;
+         this.linkEstablishmentTimeout = otherProperties.linkEstablishmentTimeout;
+         this.name = otherProperties.name;
