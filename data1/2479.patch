@@ -1,0 +1,52 @@
+From 381f76ea6f5f28f3b9b50a34b6b14c2aa711adba Mon Sep 17 00:00:00 2001
+From: Aleksandra Jovanovic <aleksandra.jovanovic@comtrade.com>
+Date: Mon, 4 Mar 2019 09:40:53 +0100
+Subject: [PATCH] Permission check for displaying Reserved User on Description
+ tab in Devices
+
+Signed-off-by: Aleksandra Jovanovic <aleksandra.jovanovic@comtrade.com>
+---
+ .../module/device/server/GwtDeviceServiceImpl.java    | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/server/GwtDeviceServiceImpl.java b/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/server/GwtDeviceServiceImpl.java
+index 3d8ce4c85b7..144d765b4fe 100644
+--- a/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/server/GwtDeviceServiceImpl.java
++++ b/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/server/GwtDeviceServiceImpl.java
+@@ -1,5 +1,5 @@
+ /*******************************************************************************
+- * Copyright (c) 2018 Eurotech and/or its affiliates and others
++ * Copyright (c) 2018, 2019 Eurotech and/or its affiliates and others
+  *
+  * All rights reserved. This program and the accompanying materials
+  * are made available under the terms of the Eclipse Public License v1.0
+@@ -72,6 +72,7 @@
+ import org.eclipse.kapua.service.tag.Tag;
+ import org.eclipse.kapua.service.tag.TagService;
+ import org.eclipse.kapua.service.user.User;
++import org.eclipse.kapua.service.user.UserDomain;
+ import org.eclipse.kapua.service.user.UserService;
+ 
+ import com.extjs.gxt.ui.client.data.BaseListLoadResult;
+@@ -171,7 +172,9 @@ public User call() throws Exception {
+                     pairs.add(new GwtGroupedNVPair("connInfo", "connConnectionStatus", deviceConnection.getStatus().toString()));
+                     pairs.add(new GwtGroupedNVPair("connInfo", "connClientId", device.getClientId()));
+                     pairs.add(new GwtGroupedNVPair("connInfo", "connUserName", lastConnectedUser != null ? lastConnectedUser.getName() : null));
+-                    pairs.add(new GwtGroupedNVPair("connInfo", "connReservedUserId", reservedUser != null ? reservedUser.getName() : null));
++                    if (AUTHORIZATION_SERVICE.isPermitted(PERMISSION_FACTORY.newPermission(new UserDomain(), Actions.read, scopeId))) {
++                        pairs.add(new GwtGroupedNVPair("connInfo", "connReservedUserId", reservedUser != null ? reservedUser.getName() : null));
++                    }
+                     pairs.add(new GwtGroupedNVPair("connInfo", "connUserCouplingMode", GwtConnectionUserCouplingMode.valueOf(deviceConnection.getUserCouplingMode().name()).getLabel()));
+                     pairs.add(new GwtGroupedNVPair("connInfo", "connClientIp", deviceConnection.getClientIp()));
+                     pairs.add(new GwtGroupedNVPair("netInfo", "netConnIface", device.getConnectionInterface()));
+@@ -183,7 +186,9 @@ public User call() throws Exception {
+                     pairs.add(new GwtGroupedNVPair("connInfo", "connConnectionStatus", DeviceConnectionStatus.DISCONNECTED.toString()));
+                     pairs.add(new GwtGroupedNVPair("connInfo", "connClientId", null));
+                     pairs.add(new GwtGroupedNVPair("connInfo", "connUserName", null));
+-                    pairs.add(new GwtGroupedNVPair("connInfo", "connReservedUserId", null));
++                    if (AUTHORIZATION_SERVICE.isPermitted(PERMISSION_FACTORY.newPermission(new UserDomain(), Actions.read, scopeId))) {
++                        pairs.add(new GwtGroupedNVPair("connInfo", "connReservedUserId", null));
++                    }
+                     pairs.add(new GwtGroupedNVPair("connInfo", "connUserCouplingMode", null));
+                     pairs.add(new GwtGroupedNVPair("connInfo", "connClientIp", null));
+                     pairs.add(new GwtGroupedNVPair("netInfo", "netConnIface", null));

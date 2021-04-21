@@ -1,0 +1,46 @@
+From 41398ed09b6485dfe5511dfd7c43c028f95ebe64 Mon Sep 17 00:00:00 2001
+From: Claudio Mezzasalma <claudio.mezzasalma@eurotech.com>
+Date: Thu, 27 Sep 2018 16:12:15 +0200
+Subject: [PATCH] Add UTC in CSV column headers
+
+Signed-off-by: Claudio Mezzasalma <claudio.mezzasalma@eurotech.com>
+---
+ .../console/module/device/servlet/DeviceEventExporter.java  | 6 +++---
+ .../app/console/module/device/servlet/DeviceExporter.java   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/servlet/DeviceEventExporter.java b/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/servlet/DeviceEventExporter.java
+index ce4ca884594..8c556cbf0bb 100644
+--- a/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/servlet/DeviceEventExporter.java
++++ b/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/servlet/DeviceEventExporter.java
+@@ -28,11 +28,11 @@
+             "Account ID",
+             "Account Name",
+             "Event ID",
+-            "Created On",
++            "Created On (UTC)",
+             "Created By",
+             "Device ID",
+-            "Received On",
+-            "Sent On",
++            "Received On (UTC)",
++            "Sent On (UTC)",
+             "Position Longitude",
+             "Position Latitude",
+             "Position Altitude",
+diff --git a/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/servlet/DeviceExporter.java b/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/servlet/DeviceExporter.java
+index cfaef976f15..8044531f292 100644
+--- a/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/servlet/DeviceExporter.java
++++ b/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/servlet/DeviceExporter.java
+@@ -30,9 +30,9 @@
+             "Client ID",
+             "Status",
+             "Connection Status",
+-            "Created On",
++            "Created On (UTC)",
+             // "Created By",
+-            "Last Event On",
++            "Last Event On (UTC)",
+             "Last Event Type",
+             "Connection IP",
+             // "MQTT connection IP",

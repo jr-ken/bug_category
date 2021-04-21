@@ -1,0 +1,59 @@
+From db11ac4331b260cf633962f8d9bc28895c76e734 Mon Sep 17 00:00:00 2001
+From: ct-ajovanovic <aleksandra.jovanovic@comtrade.com>
+Date: Fri, 16 Nov 2018 14:32:51 +0100
+Subject: [PATCH] Role paging in Users fix
+
+Signed-off-by: ct-ajovanovic <aleksandra.jovanovic@comtrade.com>
+---
+ .../server/GwtAccessRoleServiceImpl.java      | 35 +++++++++----------
+ 1 file changed, 17 insertions(+), 18 deletions(-)
+
+diff --git a/console/module/authorization/src/main/java/org/eclipse/kapua/app/console/module/authorization/server/GwtAccessRoleServiceImpl.java b/console/module/authorization/src/main/java/org/eclipse/kapua/app/console/module/authorization/server/GwtAccessRoleServiceImpl.java
+index 8485ee2ae28..d0cb1f0e8fc 100644
+--- a/console/module/authorization/src/main/java/org/eclipse/kapua/app/console/module/authorization/server/GwtAccessRoleServiceImpl.java
++++ b/console/module/authorization/src/main/java/org/eclipse/kapua/app/console/module/authorization/server/GwtAccessRoleServiceImpl.java
+@@ -146,27 +146,26 @@ public void delete(GwtXSRFToken gwtXsrfToken, String scopeShortId, String access
+                     query.setSortCriteria(sortCriteria);
+                     AccessRoleListResult accessRoleList = accessRoleService.query(query);
+ 
+-                    if (!accessRoleList.isEmpty()) {
+-                        totalLegnth = (int) accessRoleService.count(query);
+-                    }
+-
+-                    for (AccessRole accessRole : accessRoleList.getItems()) {
+-                        User createdByUser = KapuaSecurityUtils.doPrivileged(new Callable<User>() {
+-
+-                            @Override
+-                            public User call() throws Exception {
+-                                return userService.find(scopeId, user.getCreatedBy());
++                    totalLegnth = (int) accessRoleService.count(query);
++                    if (!accessRoleList.isEmpty()){
++                        for (AccessRole accessRole : accessRoleList.getItems()) {
++                            User createdByUser = KapuaSecurityUtils.doPrivileged(new Callable<User>() {
++
++                                @Override
++                                public User call() throws Exception {
++                                    return userService.find(scopeId, user.getCreatedBy());
++                                }
++                            });
++                            Role role = roleService.find(scopeId, accessRole.getRoleId());
++
++                            GwtAccessRole gwtAccessRole = KapuaGwtAuthorizationModelConverter.mergeRoleAccessRole(role, accessRole);
++
++                            if (createdByUser != null) {
++                                gwtAccessRole.setCreatedByName(createdByUser.getName());
+                             }
+-                        });
+-                        Role role = roleService.find(scopeId, accessRole.getRoleId());
+ 
+-                        GwtAccessRole gwtAccessRole = KapuaGwtAuthorizationModelConverter.mergeRoleAccessRole(role, accessRole);
+-
+-                        if (createdByUser != null) {
+-                            gwtAccessRole.setCreatedByName(createdByUser.getName());
++                            gwtAccessRoles.add(gwtAccessRole);
+                         }
+-
+-                        gwtAccessRoles.add(gwtAccessRole);
+                     }
+                 }
+             } catch (Throwable t) {

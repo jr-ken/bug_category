@@ -1,0 +1,95 @@
+From 881e27d664ce3cc5a1b025a3d8314701fc8a2100 Mon Sep 17 00:00:00 2001
+From: "ana.albic.comtrade" <Ana.Albic@comtrade.com>
+Date: Fri, 4 Jan 2019 10:45:01 +0100
+Subject: [PATCH] error disappear when end date is set after start date and the
+ opposite
+
+Signed-off-by: ana.albic.comtrade <Ana.Albic@comtrade.com>
+---
+ .../client/ui/widget/DateRangeSelector.java   | 42 ++++++++++++-------
+ 1 file changed, 26 insertions(+), 16 deletions(-)
+
+diff --git a/console/module/api/src/main/java/org/eclipse/kapua/app/console/module/api/client/ui/widget/DateRangeSelector.java b/console/module/api/src/main/java/org/eclipse/kapua/app/console/module/api/client/ui/widget/DateRangeSelector.java
+index ab0058f4cbc..912285608a1 100644
+--- a/console/module/api/src/main/java/org/eclipse/kapua/app/console/module/api/client/ui/widget/DateRangeSelector.java
++++ b/console/module/api/src/main/java/org/eclipse/kapua/app/console/module/api/client/ui/widget/DateRangeSelector.java
+@@ -1,5 +1,5 @@
+ /*******************************************************************************
+- * Copyright (c) 2017, 2018 Eurotech and/or its affiliates and others
++ * Copyright (c) 2017, 2019 Eurotech and/or its affiliates and others
+  *
+  * All rights reserved. This program and the accompanying materials
+  * are made available under the terms of the Eclipse Public License v1.0
+@@ -278,33 +278,39 @@ private void showCustomDateRangeDialog() {
+         form.add(endTimeField, formData);
+         startDateField.addListener(Events.OnBlur, new Listener<BaseEvent>() {
+ 
+-                @Override
+-                public void handleEvent(BaseEvent be) {
+-                   startDateField.setValidator(new Validator() {
++            @Override
++            public void handleEvent(BaseEvent be) {
++                startDateField.setValidator(new Validator() {
++
+                     @Override
+                     public String validate(Field<?> field, String value) {
+                         if (startDateField.getValue().after(endDateField.getValue())) {
+-                        return MSGS.dataDateRangeInvalidStartDate();
++                            return MSGS.dataDateRangeInvalidStartDate();
++                        } else {
++                            endDateField.clearInvalid();
+                         }
+                         return null;
+                     }
+-                 });
++                });
+ 
+             }
+         });
+         endDateField.addListener(Events.OnBlur, new Listener<BaseEvent>() {
+ 
+-                @Override
+-                public void handleEvent(BaseEvent be) {
+-                    endDateField.setValidator(new Validator() {
+-                        @Override
+-                        public String validate(Field<?> field, String value) {
+-                            if (endDateField.getValue().before(startDateField.getValue())) {
+-                                return MSGS.dataDateRangeInvalidStopDate();
+-                            }
+-                            return null;
++            @Override
++            public void handleEvent(BaseEvent be) {
++                endDateField.setValidator(new Validator() {
++
++                    @Override
++                    public String validate(Field<?> field, String value) {
++                        if (endDateField.getValue().before(startDateField.getValue())) {
++                            return MSGS.dataDateRangeInvalidStopDate();
++                        } else {
++                            startDateField.clearInvalid();
+                         }
+-                    });
++                        return null;
++                    }
++                });
+             }
+         });
+ 
+@@ -315,6 +321,8 @@ public String validate(Field<?> field, String value) {
+                 if (startDateField.getValue().equals(endDateField.getValue()) &&
+                         startTimeField.getDateValue().after(endTimeField.getDateValue())) {
+                     return MSGS.dataDateRangeInvalidStartTime();
++                } else {
++                    endTimeField.clearInvalid();
+                 }
+                 return null;
+             }
+@@ -326,6 +334,8 @@ public String validate(Field<?> field, String value) {
+                 if (startDateField.getValue().equals(endDateField.getValue()) &&
+                         endTimeField.getDateValue().before(startTimeField.getDateValue())) {
+                     return MSGS.dataDateRangeInvalidStopTime();
++                } else {
++                    startTimeField.clearInvalid();
+                 }
+                 return null;
+             }

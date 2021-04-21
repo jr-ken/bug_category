@@ -1,0 +1,67 @@
+From 0fd6dcc76c59a2fd4ad19168f9d0be5fbe5c5c69 Mon Sep 17 00:00:00 2001
+From: "ana.albic.comtrade" <Ana.Albic@comtrade.com>
+Date: Mon, 25 Feb 2019 13:58:43 +0100
+Subject: [PATCH] removed error message if users read permission is revoked
+
+Signed-off-by: ana.albic.comtrade <Ana.Albic@comtrade.com>
+---
+ .../connection/ConnectionFilterPanel.java      | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/client/connection/ConnectionFilterPanel.java b/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/client/connection/ConnectionFilterPanel.java
+index 75294a85758..e48ebdea7d1 100644
+--- a/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/client/connection/ConnectionFilterPanel.java
++++ b/console/module/device/src/main/java/org/eclipse/kapua/app/console/module/device/client/connection/ConnectionFilterPanel.java
+@@ -55,6 +55,8 @@
+     private GwtUser anyUser;
+     private KapuaTextField<String> protocolField;
+     private final ComboBox<GwtUser> reservedUserCombo;
++    Label userLabel;
++    Label reservedUserLabel;
+ 
+     public ConnectionFilterPanel(AbstractEntityView<GwtDeviceConnection> entityView, GwtSession currentSession) {
+         super(entityView, currentSession);
+@@ -118,7 +120,7 @@ public ConnectionFilterPanel(AbstractEntityView<GwtDeviceConnection> entityView,
+         fieldsPanel.add(clientIPFilter);
+ 
+         if (currentSession.hasPermission(UserSessionPermission.read())) {
+-            Label userLabel = new Label(MSGS.connectionFilterUser());
++            userLabel = new Label(MSGS.connectionFilterUser());
+             userLabel.setWidth(WIDTH);
+             userLabel.setStyleAttribute("margin", "5px");
+             fieldsPanel.add(userLabel);
+@@ -162,7 +164,11 @@ public void onSuccess(ListLoadResult<GwtUser> arg0) {
+ 
+                 @Override
+                 public void onFailure(Throwable arg0) {
+-                    ConsoleInfo.display(MSGS.connectionFilteringPopUpError(), MSGS.connectionFilteringUsersError());
++                    userLabel.setVisible(false);
++                    userCombo.setVisible(false);
++                    if (userCombo.isVisible()) {
++                        ConsoleInfo.display(MSGS.connectionFilteringPopUpError(), MSGS.connectionFilteringUsersError());
++                    }
+ 
+                 }
+             });
+@@ -185,7 +191,7 @@ public void onFailure(Throwable arg0) {
+         fieldsPanel.add(protocolField);
+ 
+         if (currentSession.hasPermission(UserSessionPermission.read())) {
+-            Label reservedUserLabel = new Label(MSGS.connectionFilterReservedUserLabel());
++            reservedUserLabel = new Label(MSGS.connectionFilterReservedUserLabel());
+             reservedUserLabel.setWidth(WIDTH);
+             reservedUserLabel.setStyleAttribute("margin", "5px");
+             fieldsPanel.add(reservedUserLabel);
+@@ -222,7 +228,11 @@ public void onSuccess(ListLoadResult<GwtUser> arg0) {
+ 
+                 @Override
+                 public void onFailure(Throwable arg0) {
+-                    ConsoleInfo.display(MSGS.connectionFilteringPopUpError(), MSGS.connectionFilteringUsersError());
++                    reservedUserLabel.setVisible(false);
++                    reservedUserCombo.setVisible(false);
++                    if (reservedUserCombo.isVisible()) {
++                        ConsoleInfo.display(MSGS.connectionFilteringPopUpError(), MSGS.connectionFilteringUsersError());
++                    }
+ 
+                 }
+             });

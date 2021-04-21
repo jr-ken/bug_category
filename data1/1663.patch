@@ -1,0 +1,948 @@
+From f0d26d20d6aaaa009b5087bbc4d0d0b2369ac675 Mon Sep 17 00:00:00 2001
+From: Abel Buechner-Mihaljevic <Abel.Buechner@bosch-si.com>
+Date: Thu, 12 Dec 2019 10:38:02 +0100
+Subject: [PATCH] Fix links to Hono documentation in JavaDoc.
+
+Signed-off-by: Abel Buechner-Mihaljevic <Abel.Buechner@bosch-si.com>
+---
+ .../java/org/eclipse/hono/client/CommandClient.java  |  4 ++--
+ .../org/eclipse/hono/client/CredentialsClient.java   |  8 ++++----
+ .../eclipse/hono/client/DeviceConnectionClient.java  |  2 +-
+ .../org/eclipse/hono/client/RegistrationClient.java  | 12 ++++++------
+ .../java/org/eclipse/hono/client/TenantClient.java   | 10 +++++-----
+ .../hono/client/impl/CredentialsClientImpl.java      |  6 +++---
+ .../hono/client/impl/DeviceConnectionClientImpl.java |  4 ++--
+ .../hono/client/impl/RegistrationClientImpl.java     | 10 +++++-----
+ .../java/org/eclipse/hono/auth/EncodedPassword.java  |  2 +-
+ .../org/eclipse/hono/auth/HonoPasswordEncoder.java   |  6 +++---
+ .../hono/config/ProtocolAdapterProperties.java       |  4 ++--
+ .../org/eclipse/hono/util/CredentialsObject.java     |  2 +-
+ .../java/org/eclipse/hono/util/TenantObject.java     |  2 +-
+ .../hono/service/AbstractProtocolAdapterBase.java    |  2 +-
+ .../auth/device/HonoClientBasedAuthProvider.java     |  2 +-
+ .../device/TenantServiceBasedX509Authentication.java |  2 +-
+ .../service/credentials/CredentialsAmqpEndpoint.java |  2 +-
+ .../hono/service/credentials/CredentialsService.java | 10 +++++-----
+ .../DeviceConnectionAmqpEndpoint.java                |  2 +-
+ .../deviceconnection/DeviceConnectionService.java    |  2 +-
+ .../CredentialsManagementHttpEndpoint.java           |  2 +-
+ .../credentials/CredentialsManagementService.java    |  6 +++---
+ .../management/credentials/GenericCredential.java    |  2 +-
+ .../management/credentials/PasswordCredential.java   |  2 +-
+ .../management/credentials/PskCredential.java        |  2 +-
+ .../credentials/X509CertificateCredential.java       |  2 +-
+ .../device/DeviceManagementHttpEndpoint.java         |  2 +-
+ .../management/device/DeviceManagementService.java   | 10 +++++-----
+ .../tenant/TenantManagementHttpEndpoint.java         |  2 +-
+ .../management/tenant/TenantManagementService.java   |  8 ++++----
+ .../registration/AbstractRegistrationService.java    |  2 +-
+ .../registration/RegistrationAmqpEndpoint.java       |  2 +-
+ .../service/registration/RegistrationService.java    | 10 +++++-----
+ .../hono/service/tenant/TenantAmqpEndpoint.java      |  2 +-
+ .../eclipse/hono/service/tenant/TenantService.java   | 10 +++++-----
+ .../deviceconnection/infinispan/Application.java     |  2 +-
+ .../org/eclipse/hono/deviceregistry/Application.java |  4 ++--
+ .../org/eclipse/hono/tests/LegacyCommandClient.java  |  4 ++--
+ 38 files changed, 84 insertions(+), 84 deletions(-)
+
+diff --git a/client/src/main/java/org/eclipse/hono/client/CommandClient.java b/client/src/main/java/org/eclipse/hono/client/CommandClient.java
+index 591bcf5d4b..ac703547ce 100644
+--- a/client/src/main/java/org/eclipse/hono/client/CommandClient.java
++++ b/client/src/main/java/org/eclipse/hono/client/CommandClient.java
+@@ -45,7 +45,7 @@
+      *         <p>
+      *         Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+      *         the (error) status code. Status codes are defined at
+-     *         <a href="https://www.eclipse.org/hono/docs/api/command-and-control-api">Command and Control API</a>.
++     *         <a href="https://www.eclipse.org/hono/docs/api/command-and-control">Command and Control API</a>.
+      * @throws NullPointerException if any of device ID or command are {@code null}.
+      * @see RequestResponseClient#setRequestTimeout(long)
+      */
+@@ -68,7 +68,7 @@
+      *         The future will succeed if a response with status 2xx has been received from the device. If the response has no payload, the future will complete with {@code null}.
+      *         <p>
+      *         Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+-     *         the (error) status code. Status codes are defined at <a href="https://www.eclipse.org/hono/docs/api/command-and-control-api">Command and Control API</a>.
++     *         the (error) status code. Status codes are defined at <a href="https://www.eclipse.org/hono/docs/api/command-and-control">Command and Control API</a>.
+      * @throws NullPointerException if any of device ID or command are {@code null}.
+      * @see RequestResponseClient#setRequestTimeout(long)
+      */
+diff --git a/client/src/main/java/org/eclipse/hono/client/CredentialsClient.java b/client/src/main/java/org/eclipse/hono/client/CredentialsClient.java
+index 6600cc4878..c8adf33ad8 100644
+--- a/client/src/main/java/org/eclipse/hono/client/CredentialsClient.java
++++ b/client/src/main/java/org/eclipse/hono/client/CredentialsClient.java
+@@ -25,7 +25,7 @@
+  * An instance of this interface is always scoped to a specific tenant.
+  * </p>
+  * <p>
+- * See Hono's <a href="https://www.eclipse.org/hono/docs/api/credentials-api/">
++ * See Hono's <a href="https://www.eclipse.org/hono/docs/api/credentials/">
+  * Credentials API specification</a> for a description of the result codes returned.
+  * </p>
+  */
+@@ -40,7 +40,7 @@
+      *         <p>
+      *         The future will succeed if a response with status 2xx has been received from the
+      *         credentials service. The JSON object will then contain values as defined in
+-     *         <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#get-credentials">
++     *         <a href="https://www.eclipse.org/hono/docs/api/credentials/#get-credentials">
+      *         Get Credentials</a>.
+      *         <p>
+      *         Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+@@ -60,7 +60,7 @@
+      *         <p>
+      *         The future will succeed if a response with status 2xx has been received from the
+      *         credentials service. The JSON object will then contain values as defined in
+-     *         <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#get-credentials">
++     *         <a href="https://www.eclipse.org/hono/docs/api/credentials/#get-credentials">
+      *         Get Credentials</a>.
+      *         <p>
+      *         Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+@@ -85,7 +85,7 @@
+      *         <p>
+      *         The future will succeed if a response with status 2xx has been received from the
+      *         credentials service. The JSON object will then contain values as defined in
+-     *         <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#get-credentials">
++     *         <a href="https://www.eclipse.org/hono/docs/api/credentials/#get-credentials">
+      *         Get Credentials</a>.
+      *         <p>
+      *         Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+diff --git a/client/src/main/java/org/eclipse/hono/client/DeviceConnectionClient.java b/client/src/main/java/org/eclipse/hono/client/DeviceConnectionClient.java
+index 38d3b34eeb..ceadf35426 100644
+--- a/client/src/main/java/org/eclipse/hono/client/DeviceConnectionClient.java
++++ b/client/src/main/java/org/eclipse/hono/client/DeviceConnectionClient.java
+@@ -22,7 +22,7 @@
+  * <p>
+  * An instance of this interface is always scoped to a specific tenant.
+  * <p>
+- * See Hono's <a href="https://www.eclipse.org/hono/docs/api/device-connection-api/">
++ * See Hono's <a href="https://www.eclipse.org/hono/docs/api/device-connection/">
+  * Device Connection API specification</a> for a description of the result codes returned.
+  */
+ public interface DeviceConnectionClient extends RequestResponseClient {
+diff --git a/client/src/main/java/org/eclipse/hono/client/RegistrationClient.java b/client/src/main/java/org/eclipse/hono/client/RegistrationClient.java
+index fc35b0b03b..0c33b14df5 100644
+--- a/client/src/main/java/org/eclipse/hono/client/RegistrationClient.java
++++ b/client/src/main/java/org/eclipse/hono/client/RegistrationClient.java
+@@ -22,7 +22,7 @@
+  * <p>
+  * An instance of this interface is always scoped to a specific tenant.
+  * <p>
+- * See Hono's <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/">
++ * See Hono's <a href="https://www.eclipse.org/hono/docs/api/device-registration/">
+  * Registration API specification</a> for a description of the result codes returned.
+  */
+ public interface RegistrationClient extends RequestResponseClient {
+@@ -35,7 +35,7 @@
+      *         <p>
+      *         The future will succeed if a response with status 200 has been received from the
+      *         registration service. The JSON object will then contain values as defined in
+-     *         <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/#assert-device-registration">
++     *         <a href="https://www.eclipse.org/hono/docs/api/device-registration/#assert-device-registration">
+      *         Assert Device Registration</a>.
+      *         <p>
+      *         Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+@@ -58,7 +58,7 @@
+      *         <p>
+      *         The future will succeed if a response with status 200 has been received from the
+      *         registration service. The JSON object will then contain values as defined in
+-     *         <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/#assert-device-registration">
++     *         <a href="https://www.eclipse.org/hono/docs/api/device-registration/#assert-device-registration">
+      *         Assert Device Registration</a>.
+      *         <p>
+      *         Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+@@ -86,7 +86,7 @@
+      *         <p>
+      *         The future will succeed if a response with status 200 has been received from the
+      *         registration service. The JSON object will then contain values as defined in
+-     *         <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/#assert-device-registration">
++     *         <a href="https://www.eclipse.org/hono/docs/api/device-registration/#assert-device-registration">
+      *         Assert Device Registration</a>.
+      *         <p>
+      *         Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+@@ -110,7 +110,7 @@
+      *         <p>
+      *         The future will succeed if a response with status 200 has been received from the
+      *         registration service. The JSON object will then contain values as defined in
+-     *         <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/#get-registration-information">
++     *         <a href="https://www.eclipse.org/hono/docs/api/device-registration/#get-registration-information">
+      *         Get Registration Information</a>.
+      *         <p>
+      *         Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+@@ -133,7 +133,7 @@
+      *         <p>
+      *         The future will succeed if a response with status 200 has been received from the registration service.
+      *         The JSON object will then contain values as defined in
+-     *         <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/#get-registration-information"> Get
++     *         <a href="https://www.eclipse.org/hono/docs/api/device-registration/#get-registration-information"> Get
+      *         Registration Information</a>.
+      *         <p>
+      *         Otherwise, the future will fail with a {@link ServiceInvocationException} containing the (error) status
+diff --git a/client/src/main/java/org/eclipse/hono/client/TenantClient.java b/client/src/main/java/org/eclipse/hono/client/TenantClient.java
+index ca7f8c8545..31ddbb00f8 100644
+--- a/client/src/main/java/org/eclipse/hono/client/TenantClient.java
++++ b/client/src/main/java/org/eclipse/hono/client/TenantClient.java
+@@ -23,7 +23,7 @@
+ /**
+  * A client for accessing Hono's Tenant API.
+  * <p>
+- * See Hono's <a href="https://www.eclipse.org/hono/docs/api/tenant-api">
++ * See Hono's <a href="https://www.eclipse.org/hono/docs/api/tenant">
+  * Tenant API specification</a> for a description of the result codes returned.
+  * </p>
+  */
+@@ -37,7 +37,7 @@
+      *         <ul>
+      *         <li>The future will succeed if a response with status 200 has been received from the
+      *         tenant service. The JSON object will then contain values as defined in
+-     *         <a href="https://www.eclipse.org/hono/docs/api/tenant-api/#get-tenant-information">
++     *         <a href="https://www.eclipse.org/hono/docs/api/tenant/#get-tenant-information">
+      *         Get Tenant Information</a>.</li>
+      *         <li>Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+      *         the (error) status code returned by the service.</li>
+@@ -60,7 +60,7 @@
+      *         <ul>
+      *         <li>The future will succeed if a response with status 200 has been received from the
+      *         tenant service. The JSON object will then contain values as defined in
+-     *         <a href="https://www.eclipse.org/hono/docs/api/tenant-api/#get-tenant-information">
++     *         <a href="https://www.eclipse.org/hono/docs/api/tenant/#get-tenant-information">
+      *         Get Tenant Information</a>.</li>
+      *         <li>Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+      *         the (error) status code returned by the service.</li>
+@@ -85,7 +85,7 @@
+      *         <ul>
+      *         <li>The future will succeed if a response with status 200 has been received from the
+      *         tenant service. The JSON object will then contain values as defined in
+-     *         <a href="https://www.eclipse.org/hono/docs/api/tenant-api/#get-tenant-information">
++     *         <a href="https://www.eclipse.org/hono/docs/api/tenant/#get-tenant-information">
+      *         Get Tenant Information</a>.</li>
+      *         <li>Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+      *         the (error) status code returned by the service.</li>
+@@ -114,7 +114,7 @@
+      *         <ul>
+      *         <li>The future will succeed if a response with status 200 has been received from the
+      *         tenant service. The JSON object will then contain values as defined in
+-     *         <a href="https://www.eclipse.org/hono/docs/api/tenant-api/#get-tenant-information">
++     *         <a href="https://www.eclipse.org/hono/docs/api/tenant/#get-tenant-information">
+      *         Get Tenant Information</a>.</li>
+      *         <li>Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+      *         the (error) status code returned by the service.</li>
+diff --git a/client/src/main/java/org/eclipse/hono/client/impl/CredentialsClientImpl.java b/client/src/main/java/org/eclipse/hono/client/impl/CredentialsClientImpl.java
+index 29002fd55a..f89426f6c2 100644
+--- a/client/src/main/java/org/eclipse/hono/client/impl/CredentialsClientImpl.java
++++ b/client/src/main/java/org/eclipse/hono/client/impl/CredentialsClientImpl.java
+@@ -167,7 +167,7 @@ public static final String getTargetAddress(final String tenantId) {
+ 
+     /**
+      * Invokes the <em>Get Credentials</em> operation of Hono's
+-     * <a href="https://www.eclipse.org/hono/docs/api/credentials-api/">Credentials API</a>
++     * <a href="https://www.eclipse.org/hono/docs/api/credentials/">Credentials API</a>
+      * on the service represented by the <em>sender</em> and <em>receiver</em> links.
+      */
+     @Override
+@@ -177,7 +177,7 @@ public static final String getTargetAddress(final String tenantId) {
+ 
+     /**
+      * Invokes the <em>Get Credentials</em> operation of Hono's
+-     * <a href="https://www.eclipse.org/hono/docs/api/credentials-api/">Credentials API</a>
++     * <a href="https://www.eclipse.org/hono/docs/api/credentials/">Credentials API</a>
+      * on the service represented by the <em>sender</em> and <em>receiver</em> links.
+      */
+     @Override
+@@ -187,7 +187,7 @@ public static final String getTargetAddress(final String tenantId) {
+ 
+     /**
+      * Invokes the <em>Get Credentials</em> operation of Hono's
+-     * <a href="https://www.eclipse.org/hono/docs/api/credentials-api/">Credentials API</a>
++     * <a href="https://www.eclipse.org/hono/docs/api/credentials/">Credentials API</a>
+      * on the service represented by the <em>sender</em> and <em>receiver</em> links.
+      */
+     @Override
+diff --git a/client/src/main/java/org/eclipse/hono/client/impl/DeviceConnectionClientImpl.java b/client/src/main/java/org/eclipse/hono/client/impl/DeviceConnectionClientImpl.java
+index 403a995c48..d54450b8e5 100644
+--- a/client/src/main/java/org/eclipse/hono/client/impl/DeviceConnectionClientImpl.java
++++ b/client/src/main/java/org/eclipse/hono/client/impl/DeviceConnectionClientImpl.java
+@@ -160,7 +160,7 @@ protected final DeviceConnectionResult getResult(
+ 
+     /**
+      * Invokes the <em>Set Last Known Gateway for Device</em> operation of Hono's
+-     * <a href="https://www.eclipse.org/hono/docs/api/device-connection-api">Device Connection API</a>
++     * <a href="https://www.eclipse.org/hono/docs/api/device-connection">Device Connection API</a>
+      * on the service represented by the <em>sender</em> and <em>receiver</em> links.
+      */
+     @Override
+@@ -197,7 +197,7 @@ protected final DeviceConnectionResult getResult(
+ 
+     /**
+      * Invokes the <em>Get Last Known Gateway for Device</em> operation of Hono's
+-     * <a href="https://www.eclipse.org/hono/docs/api/device-connection-api">Device Connection API</a>
++     * <a href="https://www.eclipse.org/hono/docs/api/device-connection">Device Connection API</a>
+      * on the service represented by the <em>sender</em> and <em>receiver</em> links.
+      */
+     @Override
+diff --git a/client/src/main/java/org/eclipse/hono/client/impl/RegistrationClientImpl.java b/client/src/main/java/org/eclipse/hono/client/impl/RegistrationClientImpl.java
+index b26885c3ae..8fbf1c2032 100644
+--- a/client/src/main/java/org/eclipse/hono/client/impl/RegistrationClientImpl.java
++++ b/client/src/main/java/org/eclipse/hono/client/impl/RegistrationClientImpl.java
+@@ -167,7 +167,7 @@ protected final RegistrationResult getResult(
+ 
+     /**
+      * Invokes the <em>Get Registration Information</em> operation of Hono's
+-     * <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/">Device Registration API</a>
++     * <a href="https://www.eclipse.org/hono/docs/api/device-registration/">Device Registration API</a>
+      * on the service represented by the <em>sender</em> and <em>receiver</em> links.
+      */
+     @Override
+@@ -177,7 +177,7 @@ protected final RegistrationResult getResult(
+ 
+     /**
+      * Invokes the <em>Get Registration Information</em> operation of Hono's
+-     * <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/">Device Registration API</a>
++     * <a href="https://www.eclipse.org/hono/docs/api/device-registration/">Device Registration API</a>
+      * on the service represented by the <em>sender</em> and <em>receiver</em> links.
+      */
+     @Override
+@@ -207,7 +207,7 @@ protected final RegistrationResult getResult(
+ 
+     /**
+      * Invokes the <em>Assert Device Registration</em> operation of Hono's
+-     * <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/">Device Registration API</a>
++     * <a href="https://www.eclipse.org/hono/docs/api/device-registration/">Device Registration API</a>
+      * on the service represented by the <em>sender</em> and <em>receiver</em> links.
+      * <p>
+      * This method delegates to {@link #assertRegistration(String, String)} with {@code null}
+@@ -220,7 +220,7 @@ protected final RegistrationResult getResult(
+ 
+     /**
+      * Invokes the <em>Assert Device Registration</em> operation of Hono's
+-     * <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/">Device Registration API</a>
++     * <a href="https://www.eclipse.org/hono/docs/api/device-registration/">Device Registration API</a>
+      * on the service represented by the <em>sender</em> and <em>receiver</em> links.
+      */
+     @Override
+@@ -231,7 +231,7 @@ protected final RegistrationResult getResult(
+ 
+     /**
+      * Invokes the <em>Assert Device Registration</em> operation of Hono's
+-     * <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/">Device Registration API</a>
++     * <a href="https://www.eclipse.org/hono/docs/api/device-registration/">Device Registration API</a>
+      * on the service represented by the <em>sender</em> and <em>receiver</em> links.
+      * <p>
+      * This method delegates to {@link #assertRegistration(String, String)} with {@code null}
+diff --git a/core/src/main/java/org/eclipse/hono/auth/EncodedPassword.java b/core/src/main/java/org/eclipse/hono/auth/EncodedPassword.java
+index 710c11923b..5a0fb4bebe 100644
+--- a/core/src/main/java/org/eclipse/hono/auth/EncodedPassword.java
++++ b/core/src/main/java/org/eclipse/hono/auth/EncodedPassword.java
+@@ -66,7 +66,7 @@ public EncodedPassword(final String formattedPassword) {
+      * Creates a new instance from Hono Secret.
+      * <p>
+      * The secret is expected to be of type <em>hashed-password</em> as defined by
+-     * <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#hashed-password">Hono's Credentials API</a>.
++     * <a href="https://www.eclipse.org/hono/docs/api/credentials/#hashed-password">Hono's Credentials API</a>.
+      *
+      * @param secret JSON object that contains the Hono-formatted secret.
+      * @return The password value object.
+diff --git a/core/src/main/java/org/eclipse/hono/auth/HonoPasswordEncoder.java b/core/src/main/java/org/eclipse/hono/auth/HonoPasswordEncoder.java
+index 2d2613ec5a..1183f3a836 100644
+--- a/core/src/main/java/org/eclipse/hono/auth/HonoPasswordEncoder.java
++++ b/core/src/main/java/org/eclipse/hono/auth/HonoPasswordEncoder.java
+@@ -18,7 +18,7 @@
+ 
+ /**
+  * A helper for encoding and matching passwords against credentials
+- * managed by a Hono <a href="https://www.eclipse.org/hono/docs/api/credentials-api/">
++ * managed by a Hono <a href="https://www.eclipse.org/hono/docs/api/credentials/">
+  * Credentials</a> service implementation.
+  */
+ public interface HonoPasswordEncoder {
+@@ -28,7 +28,7 @@
+      * 
+      * @param rawPassword The clear text password to encode.
+      * @return A <em>secret</em> as defined by Hono's
+-     *         <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#hashed-password">
++     *         <a href="https://www.eclipse.org/hono/docs/api/credentials/#hashed-password">
+      *         hashed-password credentials type</a>. The secret contains the name of the hash
+      *         function, (optional) salt and the password hash.
+      */
+@@ -38,7 +38,7 @@
+      * Matches a given password against credentials on record.
+      * 
+      * @param rawPassword The clear text password to match.
+-     * @param secret The <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#hashed-password">
++     * @param secret The <a href="https://www.eclipse.org/hono/docs/api/credentials/#hashed-password">
+      *               hashed-password secret</a> to match against.
+      * @return {@code true} if the password matches.
+      */
+diff --git a/core/src/main/java/org/eclipse/hono/config/ProtocolAdapterProperties.java b/core/src/main/java/org/eclipse/hono/config/ProtocolAdapterProperties.java
+index 2c28c3cb0d..0c3bff33d1 100644
+--- a/core/src/main/java/org/eclipse/hono/config/ProtocolAdapterProperties.java
++++ b/core/src/main/java/org/eclipse/hono/config/ProtocolAdapterProperties.java
+@@ -37,7 +37,7 @@
+ 
+     /**
+      * Checks whether the protocol adapter always authenticates devices using their provided credentials as defined
+-     * in the <a href="https://www.eclipse.org/hono/docs/api/credentials-api/">Credentials API</a>.
++     * in the <a href="https://www.eclipse.org/hono/docs/api/credentials/">Credentials API</a>.
+      * <p>
+      * If this property is {@code false} then devices are always allowed to publish data without providing
+      * credentials. This should only be set to false in test setups.
+@@ -52,7 +52,7 @@ public final boolean isAuthenticationRequired() {
+ 
+     /**
+      * Sets whether the protocol adapter always authenticates devices using their provided credentials as defined
+-     * in the <a href="https://www.eclipse.org/hono/docs/api/credentials-api/">Credentials API</a>.
++     * in the <a href="https://www.eclipse.org/hono/docs/api/credentials/">Credentials API</a>.
+      * <p>
+      * If this property is set to {@code false} then devices are always allowed to publish data without providing
+      * credentials. This should only be set to false in test setups.
+diff --git a/core/src/main/java/org/eclipse/hono/util/CredentialsObject.java b/core/src/main/java/org/eclipse/hono/util/CredentialsObject.java
+index 1ac6285d4c..38ef6c5e9c 100644
+--- a/core/src/main/java/org/eclipse/hono/util/CredentialsObject.java
++++ b/core/src/main/java/org/eclipse/hono/util/CredentialsObject.java
+@@ -38,7 +38,7 @@
+ 
+ /**
+  * Encapsulates the credentials information for a device as defined by the
+- * <a href="https://www.eclipse.org/hono/docs/api/credentials-api/">Credentials API</a>.
++ * <a href="https://www.eclipse.org/hono/docs/api/credentials/">Credentials API</a>.
+  */
+ public final class CredentialsObject extends JsonBackedValueObject {
+ 
+diff --git a/core/src/main/java/org/eclipse/hono/util/TenantObject.java b/core/src/main/java/org/eclipse/hono/util/TenantObject.java
+index 7b64d9fb3d..06555bc733 100644
+--- a/core/src/main/java/org/eclipse/hono/util/TenantObject.java
++++ b/core/src/main/java/org/eclipse/hono/util/TenantObject.java
+@@ -42,7 +42,7 @@
+ 
+ /**
+  * Encapsulates the tenant information that was found by the get operation of the
+- * <a href="https://www.eclipse.org/hono/docs/api/tenant-api/">Tenant API</a>.
++ * <a href="https://www.eclipse.org/hono/docs/api/tenant/">Tenant API</a>.
+  */
+ @JsonInclude(value = Include.NON_NULL)
+ public final class TenantObject extends JsonBackedValueObject {
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/AbstractProtocolAdapterBase.java b/service-base/src/main/java/org/eclipse/hono/service/AbstractProtocolAdapterBase.java
+index f14a9d14d4..f511de9309 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/AbstractProtocolAdapterBase.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/AbstractProtocolAdapterBase.java
+@@ -1115,7 +1115,7 @@ private boolean isGatewaySupportedForDevice(final JsonObject registrationAsserti
+      * Gets configuration information for a tenant.
+      * <p>
+      * The returned JSON object contains information as defined by Hono's
+-     * <a href="https://www.eclipse.org/hono/docs/api/tenant-api/#get-tenant-information">Tenant API</a>.
++     * <a href="https://www.eclipse.org/hono/docs/api/tenant/#get-tenant-information">Tenant API</a>.
+      *
+      * @param tenantId The tenant to retrieve information for.
+      * @param context The currently active OpenTracing span that is used to
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/auth/device/HonoClientBasedAuthProvider.java b/service-base/src/main/java/org/eclipse/hono/service/auth/device/HonoClientBasedAuthProvider.java
+index 8230a3d4ff..b2de9db601 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/auth/device/HonoClientBasedAuthProvider.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/auth/device/HonoClientBasedAuthProvider.java
+@@ -34,7 +34,7 @@
+      * for the device.
+      * <p>
+      * The credentials on record are retrieved using Hono's
+-     *  <a href="https://www.eclipse.org/hono/docs/api/credentials-api/">Credentials API</a>.
++     *  <a href="https://www.eclipse.org/hono/docs/api/credentials/">Credentials API</a>.
+      *
+      * @param credentials The credentials provided by the device.
+      * @param spanContext The SpanContext (may be null).
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/auth/device/TenantServiceBasedX509Authentication.java b/service-base/src/main/java/org/eclipse/hono/service/auth/device/TenantServiceBasedX509Authentication.java
+index e07ed919d5..6461385016 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/auth/device/TenantServiceBasedX509Authentication.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/auth/device/TenantServiceBasedX509Authentication.java
+@@ -53,7 +53,7 @@
+  * <p>
+  * The trust anchor is determined by looking up the tenant that the device
+  * belongs to using the client certificate's issuer DN as described by the
+- * <a href="https://www.eclipse.org/hono/docs/api/tenant-api/#get-tenant-information">
++ * <a href="https://www.eclipse.org/hono/docs/api/tenant/#get-tenant-information">
+  * Tenant API</a>.
+  *
+  */
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/credentials/CredentialsAmqpEndpoint.java b/service-base/src/main/java/org/eclipse/hono/service/credentials/CredentialsAmqpEndpoint.java
+index 093a9a4566..7f2e88fdc6 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/credentials/CredentialsAmqpEndpoint.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/credentials/CredentialsAmqpEndpoint.java
+@@ -32,7 +32,7 @@
+ /**
+  * An {@code AmqpEndpoint} for managing device credential information.
+  * <p>
+- * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/docs/api/credentials-api/">Credentials API</a>.
++ * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/docs/api/credentials/">Credentials API</a>.
+  * It receives AMQP 1.0 messages representing requests and sends them to an address on the vertx
+  * event bus for processing. The outcome is then returned to the peer in a response message.
+  */
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/credentials/CredentialsService.java b/service-base/src/main/java/org/eclipse/hono/service/credentials/CredentialsService.java
+index 4943f4cd6d..72dd2e8997 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/credentials/CredentialsService.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/credentials/CredentialsService.java
+@@ -25,7 +25,7 @@
+  * A service for keeping record of device credentials.
+  * This interface only covers mandatory operations.
+  *
+- * @see <a href="https://www.eclipse.org/hono/docs/api/credentials-api/">Credentials API</a>
++ * @see <a href="https://www.eclipse.org/hono/docs/api/credentials/">Credentials API</a>
+  */
+ public interface CredentialsService {
+ 
+@@ -43,7 +43,7 @@
+      *         <li><em>404 Not Found</em> if no credentials matching the criteria exist.</li>
+      *         </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#get-credentials">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/credentials/#get-credentials">
+      *      Credentials API - Get Credentials</a>
+      */
+     default void get(final String tenantId, final String type, final String authId,
+@@ -70,7 +70,7 @@ default void get(final String tenantId, final String type, final String authId,
+      *         <li><em>404 Not Found</em> if no credentials matching the criteria exist.</li>
+      *         </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#get-credentials">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/credentials/#get-credentials">
+      *      Credentials API - Get Credentials</a>
+      */
+     void get(String tenantId, String type, String authId, Span span,
+@@ -91,7 +91,7 @@ void get(String tenantId, String type, String authId, Span span,
+      *         <li><em>404 Not Found</em> if no credentials matching the criteria exist.</li>
+      *         </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#get-credentials">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/credentials/#get-credentials">
+      *      Credentials API - Get Credentials</a>
+      */
+     default void get(final String tenantId, final String type, final String authId, final JsonObject clientContext,
+@@ -119,7 +119,7 @@ default void get(final String tenantId, final String type, final String authId,
+      *         <li><em>404 Not Found</em> if no credentials matching the criteria exist.</li>
+      *         </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#get-credentials">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/credentials/#get-credentials">
+      *      Credentials API - Get Credentials</a>
+      */
+     void get(String tenantId, String type, String authId, JsonObject clientContext, Span span,
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/deviceconnection/DeviceConnectionAmqpEndpoint.java b/service-base/src/main/java/org/eclipse/hono/service/deviceconnection/DeviceConnectionAmqpEndpoint.java
+index 73fdd9b7df..71f085d8bb 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/deviceconnection/DeviceConnectionAmqpEndpoint.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/deviceconnection/DeviceConnectionAmqpEndpoint.java
+@@ -34,7 +34,7 @@
+ /**
+  * An {@code AmqpEndpoint} for managing device connection information.
+  * <p>
+- * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/docs/api/device-connection-api/">Device
++ * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/docs/api/device-connection/">Device
+  * Connection API</a>. It receives AMQP 1.0 messages representing requests and sends them to an address on the vertx
+  * event bus for processing. The outcome is then returned to the peer in a response message.
+  */
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/deviceconnection/DeviceConnectionService.java b/service-base/src/main/java/org/eclipse/hono/service/deviceconnection/DeviceConnectionService.java
+index ac0f4f7b10..377f601e2c 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/deviceconnection/DeviceConnectionService.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/deviceconnection/DeviceConnectionService.java
+@@ -22,7 +22,7 @@
+ /**
+  * A service for keeping record of device connection information.
+  *
+- * @see <a href="https://www.eclipse.org/hono/docs/api/device-connection-api/">Device Connection API</a>
++ * @see <a href="https://www.eclipse.org/hono/docs/api/device-connection/">Device Connection API</a>
+  */
+ public interface DeviceConnectionService {
+ 
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/management/credentials/CredentialsManagementHttpEndpoint.java b/service-base/src/main/java/org/eclipse/hono/service/management/credentials/CredentialsManagementHttpEndpoint.java
+index f4fe13d166..152d24553f 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/management/credentials/CredentialsManagementHttpEndpoint.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/management/credentials/CredentialsManagementHttpEndpoint.java
+@@ -38,7 +38,7 @@
+ /**
+  * An {@code HttpEndpoint} for managing device credentials.
+  * <p>
+- * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/api/Credentials-API//">Credentials API</a>.
++ * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/docs/api/credentials//">Credentials API</a>.
+  * It receives HTTP requests representing operation invocations and sends them to the address {@link RegistryManagementConstants#EVENT_BUS_ADDRESS_CREDENTIALS_MANAGEMENT_IN} on the vertx
+  * event bus for processing. The outcome is then returned to the client in the HTTP response.
+  */
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/management/credentials/CredentialsManagementService.java b/service-base/src/main/java/org/eclipse/hono/service/management/credentials/CredentialsManagementService.java
+index 80e193f571..73fb172fef 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/management/credentials/CredentialsManagementService.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/management/credentials/CredentialsManagementService.java
+@@ -25,7 +25,7 @@
+  * A service for keeping record of device credentials.
+  * This interface presents all the available operations on the API.
+  *
+- * @see <a href="https://www.eclipse.org/hono/api/credentials-api/">Credentials API</a>
++ * @see <a href="https://www.eclipse.org/hono/docs/api/credentials/">Credentials API</a>
+  */
+ public interface CredentialsManagementService {
+ 
+@@ -35,7 +35,7 @@
+      * @param tenantId The tenant the device belongs to.
+      * @param deviceId The device to get credentials for.
+      * @param credentials A list of credentials.
+-     *                  See <a href="https://www.eclipse.org/hono/api/Credentials-API/#credentials-format">Credentials Format</a> for details.
++     *                  See <a href="https://www.eclipse.org/hono/docs/api/credentials/#credentials-format">Credentials Format</a> for details.
+      * @param resourceVersion The identifier of the resource version to update.
+      * @param span The active OpenTracing span for this operation. It is not to be closed in this method!
+      *          An implementation should log (error) events on this span and it may set tags and use this span as the
+@@ -49,7 +49,7 @@
+      *         <li><em>404 Not Found</em> if no credentials of the given type and auth-id exist.</li>
+      *         </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/api/credentials-api/#update-credentials">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/credentials/#update-credentials">
+      *      Credentials API - Update Credentials</a>
+      */
+     void set(String tenantId, String deviceId, Optional<String> resourceVersion, List<CommonCredential> credentials,
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/management/credentials/GenericCredential.java b/service-base/src/main/java/org/eclipse/hono/service/management/credentials/GenericCredential.java
+index 378675b4f3..64246370be 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/management/credentials/GenericCredential.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/management/credentials/GenericCredential.java
+@@ -42,7 +42,7 @@
+      * @param type  The credential name type to set.
+      * @return      a reference to this for fluent use.
+      * 
+-     * @see <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#standard-credential-types">Standard Credential Types</a>
++     * @see <a href="https://www.eclipse.org/hono/docs/api/credentials/#standard-credential-types">Standard Credential Types</a>
+      */
+     public GenericCredential setType(final String type) {
+         this.type = type;
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/management/credentials/PasswordCredential.java b/service-base/src/main/java/org/eclipse/hono/service/management/credentials/PasswordCredential.java
+index 69bee483b8..6a75d3864a 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/management/credentials/PasswordCredential.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/management/credentials/PasswordCredential.java
+@@ -21,7 +21,7 @@
+ /**
+  * A credential type for storing a password for a device.
+  * <p>
+- * See <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#hashed-password">Hashed Password</a> for an example
++ * See <a href="https://www.eclipse.org/hono/docs/api/credentials/#hashed-password">Hashed Password</a> for an example
+  * of the configuration properties for this credential type.
+  */
+ @JsonInclude(value = JsonInclude.Include.NON_NULL)
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/management/credentials/PskCredential.java b/service-base/src/main/java/org/eclipse/hono/service/management/credentials/PskCredential.java
+index a6da82adba..cee3889b4b 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/management/credentials/PskCredential.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/management/credentials/PskCredential.java
+@@ -21,7 +21,7 @@
+ /**
+  * A credential type for storing a Pre-shared Key as used in TLS handshakes.
+  * <p>
+- * See <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#pre-shared-key">Pre-Shared Key</a> for an example
++ * See <a href="https://www.eclipse.org/hono/docs/api/credentials/#pre-shared-key">Pre-Shared Key</a> for an example
+  * of the configuration properties for this credential type.
+  */
+ @JsonInclude(value = JsonInclude.Include.NON_NULL)
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/management/credentials/X509CertificateCredential.java b/service-base/src/main/java/org/eclipse/hono/service/management/credentials/X509CertificateCredential.java
+index f9019446f2..93df36e9f4 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/management/credentials/X509CertificateCredential.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/management/credentials/X509CertificateCredential.java
+@@ -22,7 +22,7 @@
+  * A credential type for storing the <a href="https://www.ietf.org/rfc/rfc2253.txt">RFC 2253</a> formatted subject DN of
+  * a client certificate.
+  * <p>
+- * See <a href="https://www.eclipse.org/hono/docs/api/credentials-api/#x-509-certificate">X.509 Certificate</a> for an
++ * See <a href="https://www.eclipse.org/hono/docs/api/credentials/#x-509-certificate">X.509 Certificate</a> for an
+  * example of the configuration properties for this credential type.
+  */
+ @JsonInclude(value = JsonInclude.Include.NON_NULL)
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/management/device/DeviceManagementHttpEndpoint.java b/service-base/src/main/java/org/eclipse/hono/service/management/device/DeviceManagementHttpEndpoint.java
+index d4a380b685..0a9924bc8b 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/management/device/DeviceManagementHttpEndpoint.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/management/device/DeviceManagementHttpEndpoint.java
+@@ -33,7 +33,7 @@
+ /**
+  * An {@code HttpEndpoint} for managing device registration information.
+  * <p>
+- * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/api/Device-Registration-API/">Device
++ * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/docs/api/device-registration/">Device
+  * Registration API</a>. It receives HTTP requests representing operation invocations and sends them to an address on
+  * the vertx event bus for processing. The outcome is then returned to the peer in the HTTP response.
+  */
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/management/device/DeviceManagementService.java b/service-base/src/main/java/org/eclipse/hono/service/management/device/DeviceManagementService.java
+index a917d6b27d..b15e70aa80 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/management/device/DeviceManagementService.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/management/device/DeviceManagementService.java
+@@ -26,7 +26,7 @@
+  * A service for managing devices. <br>
+  * This interface presents all the available operations on the API.
+  *
+- * @see <a href="https://www.eclipse.org/hono/api/device-registration-api/">Device Registration API</a>
++ * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration/">Device Registration API</a>
+  */
+ public interface DeviceManagementService {
+ 
+@@ -45,7 +45,7 @@
+      *            <li><em>409 Conflict</em> if a device with the given identifier already exists for the tenant.</li>
+      *            </ul>
+      * @throws NullPointerException if any of tenant, device ID or result handler is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/api/device-registration-api/#register-device"> Device Registration API
++     * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration/#register-device"> Device Registration API
+      *      - Register Device</a>
+      */
+     void createDevice(String tenantId, Optional<String> deviceId, Device device, Span span,
+@@ -66,7 +66,7 @@ void createDevice(String tenantId, Optional<String> deviceId, Device device, Spa
+      *            <li><em>404 Not Found</em> if no device with the given identifier is registered for the tenant.</li>
+      *            </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/api/device-registration-api/#get-registration-information"> Device
++     * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration/#get-registration-information"> Device
+      *      Registration API - Get Registration Information</a>
+      */
+     void readDevice(String tenantId, String deviceId, Span span,
+@@ -88,7 +88,7 @@ void readDevice(String tenantId, String deviceId, Span span,
+      *            <li><em>404 Not Found</em> if no device with the given identifier is registered for the tenant.</li>
+      *            </ul>
+      * @throws NullPointerException if any of tenant, device ID or result handler is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/api/device-registration-api/#update-device-registration"> Device
++     * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration/#update-device-registration"> Device
+      *      Registration API - Update Device Registration</a>
+      */
+     void updateDevice(String tenantId, String deviceId, Device device, Optional<String> resourceVersion, Span span,
+@@ -111,7 +111,7 @@ void updateDevice(String tenantId, String deviceId, Device device, Optional<Stri
+      *             registered for the tenant.</li>
+      *             </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/api/device-registration-api/#deregister-device">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration/#deregister-device">
+      *      Device Registration API - Deregister Device</a>
+      */
+     void deleteDevice(String tenantId, String deviceId, Optional<String> resourceVersion, Span span,
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/management/tenant/TenantManagementHttpEndpoint.java b/service-base/src/main/java/org/eclipse/hono/service/management/tenant/TenantManagementHttpEndpoint.java
+index 19294098cc..fae5961472 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/management/tenant/TenantManagementHttpEndpoint.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/management/tenant/TenantManagementHttpEndpoint.java
+@@ -38,7 +38,7 @@
+ /**
+  * An {@code HttpEndpoint} for managing tenant information.
+  * <p>
+- * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/api/tenant-api/">Tenant API</a>.
++ * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/docs/api/tenant/">Tenant API</a>.
+  * It receives HTTP requests representing operation invocations and sends them to an address on the vertx
+  * event bus for processing. The outcome is then returned to the peer in the HTTP response.
+  */
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/management/tenant/TenantManagementService.java b/service-base/src/main/java/org/eclipse/hono/service/management/tenant/TenantManagementService.java
+index eff117f292..65cc21faca 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/management/tenant/TenantManagementService.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/management/tenant/TenantManagementService.java
+@@ -42,7 +42,7 @@
+      *             <li><em>409 Conflict</em> if a tenant with the given identifier and version already exists.</li>
+      *             </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/api/tenant-api/#add-tenant">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/tenant/#add-tenant">
+      *      Tenant API - Add Tenant</a>
+      */
+     void add(Optional<String> tenantId, JsonObject tenantObj, Span span, Handler<AsyncResult<OperationResult<Id>>> resultHandler);
+@@ -61,7 +61,7 @@
+      *            <li><em>404 Not Found</em> if no tenant with the given identifier and version exists.</li>
+      *            </ul>
+      * @throws NullPointerException if any of the parameters are {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/api/tenant-api/#get-tenant-information"> Tenant API - Get Tenant
++     * @see <a href="https://www.eclipse.org/hono/docs/api/tenant/#get-tenant-information"> Tenant API - Get Tenant
+      *      Information</a>
+      */
+     void read(String tenantId, Span span, Handler<AsyncResult<OperationResult<Tenant>>> resultHandler);
+@@ -82,7 +82,7 @@
+      *             <li><em>404 Not Found</em> if no tenant with the given identifier and version exists.</li>
+      *             </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/api/tenant-api/#update-tenant">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/tenant/#update-tenant">
+      *      Tenant API - Update Tenant</a>
+      */
+     void update(String tenantId, JsonObject tenantObj, Optional<String> resourceVersion,
+@@ -103,7 +103,7 @@ void update(String tenantId, JsonObject tenantObj, Optional<String> resourceVers
+      *             <li><em>404 Not Found</em> if no tenant with the given identifier and version exists.</li>
+      *             </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/api/tenant-api/#remove-tenant">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/tenant/#remove-tenant">
+      *      Tenant API - Remove Tenant</a>
+      */
+     void remove(String tenantId, Optional<String> resourceVersion, Span span, Handler<AsyncResult<Result<Void>>> resultHandler);
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/registration/AbstractRegistrationService.java b/service-base/src/main/java/org/eclipse/hono/service/registration/AbstractRegistrationService.java
+index 1e89035a7f..ebb86cafcd 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/registration/AbstractRegistrationService.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/registration/AbstractRegistrationService.java
+@@ -67,7 +67,7 @@
+      *            <li><em>404 Not Found</em> if no device with the given identifier is registered for the tenant.</li>
+      *            </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/api/device-registration-api/#get-registration-information"> Device
++     * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration/#get-registration-information"> Device
+      *      Registration API - Get Registration Information</a>
+      */
+     protected abstract void getDevice(
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/registration/RegistrationAmqpEndpoint.java b/service-base/src/main/java/org/eclipse/hono/service/registration/RegistrationAmqpEndpoint.java
+index 135b1ab753..eef4d375cd 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/registration/RegistrationAmqpEndpoint.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/registration/RegistrationAmqpEndpoint.java
+@@ -32,7 +32,7 @@
+ /**
+  * An {@code AmqpEndpoint} for managing device registration information.
+  * <p>
+- * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/">Device Registration API</a>.
++ * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/docs/api/device-registration/">Device Registration API</a>.
+  * It receives AMQP 1.0 messages representing requests and sends them to an address on the vertx
+  * event bus for processing. The outcome is then returned to the peer in a response message.
+  */
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/registration/RegistrationService.java b/service-base/src/main/java/org/eclipse/hono/service/registration/RegistrationService.java
+index 436aad02ad..774f6bc23d 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/registration/RegistrationService.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/registration/RegistrationService.java
+@@ -23,7 +23,7 @@
+  * A minimal service for keeping record of device identities.
+  * This interface covers only the mandatory operations.
+  *
+- * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/">Device Registration API</a>
++ * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration/">Device Registration API</a>
+  */
+ public interface RegistrationService {
+ 
+@@ -42,7 +42,7 @@
+      *             registered for the tenant or its <em>enabled</em> property is {@code false}.</li>
+      *             </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/#assert-device-registration">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration/#assert-device-registration">
+      *      Device Registration API - Assert Device Registration</a>
+      */
+     void assertRegistration(String tenantId, String deviceId, Handler<AsyncResult<RegistrationResult>> resultHandler);
+@@ -67,7 +67,7 @@
+      *             registered for the tenant or its <em>enabled</em> property is {@code false}.</li>
+      *             </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/#assert-device-registration">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration/#assert-device-registration">
+      *      Device Registration API - Assert Device Registration</a>
+      */
+     default void assertRegistration(final String tenantId, final String deviceId, final Span span,
+@@ -100,7 +100,7 @@ default void assertRegistration(final String tenantId, final String deviceId, fi
+      *             registered for the tenant or its <em>enabled</em> property is {@code false}.</li>
+      *             </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/#assert-device-registration">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration/#assert-device-registration">
+      *      Device Registration API - Assert Device Registration</a>
+      */
+     void assertRegistration(String tenantId, String deviceId, String gatewayId, Handler<AsyncResult<RegistrationResult>> resultHandler);
+@@ -135,7 +135,7 @@ default void assertRegistration(final String tenantId, final String deviceId, fi
+      *             registered for the tenant or its <em>enabled</em> property is {@code false}.</li>
+      *             </ul>
+      * @throws NullPointerException if any of the parameters is {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/#assert-device-registration">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/device-registration/#assert-device-registration">
+      *      Device Registration API - Assert Device Registration</a>
+      */
+     default void assertRegistration(final String tenantId, final String deviceId, final String gatewayId,
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/tenant/TenantAmqpEndpoint.java b/service-base/src/main/java/org/eclipse/hono/service/tenant/TenantAmqpEndpoint.java
+index dc1e4a0f13..e675859ad9 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/tenant/TenantAmqpEndpoint.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/tenant/TenantAmqpEndpoint.java
+@@ -35,7 +35,7 @@
+ /**
+  * An {@code AmqpEndpoint} for managing tenant information.
+  * <p>
+- * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/docs/api/tenant-api/">Tenant API</a>. It receives AMQP 1.0
++ * This endpoint implements Hono's <a href="https://www.eclipse.org/hono/docs/api/tenant/">Tenant API</a>. It receives AMQP 1.0
+  * messages representing requests and sends them to an address on the vertx event bus for processing. The outcome is
+  * then returned to the peer in a response message.
+  */
+diff --git a/service-base/src/main/java/org/eclipse/hono/service/tenant/TenantService.java b/service-base/src/main/java/org/eclipse/hono/service/tenant/TenantService.java
+index a030e0c038..75f2c9873f 100644
+--- a/service-base/src/main/java/org/eclipse/hono/service/tenant/TenantService.java
++++ b/service-base/src/main/java/org/eclipse/hono/service/tenant/TenantService.java
+@@ -26,7 +26,7 @@
+  * A service for keeping record of tenant information.
+  * This interface only covers mandatory operations.
+  *
+- * @see <a href="https://www.eclipse.org/hono/docs/api/tenant-api/">Tenant API</a>
++ * @see <a href="https://www.eclipse.org/hono/docs/api/tenant/">Tenant API</a>
+  */
+ public interface TenantService {
+ 
+@@ -42,7 +42,7 @@
+      *             <li><em>404 Not Found</em> if no tenant with the given identifier and version exists.</li>
+      *             </ul>
+      * @throws NullPointerException if any of the parameters are {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/docs/api/tenant-api/#get-tenant-information">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/tenant/#get-tenant-information">
+      *      Tenant API - Get Tenant Information</a>
+      */
+     void get(String tenantId, Handler<AsyncResult<TenantResult<JsonObject>>> resultHandler);
+@@ -64,7 +64,7 @@
+      *             <li><em>404 Not Found</em> if no tenant with the given identifier exists.</li>
+      *             </ul>
+      * @throws NullPointerException if any of the parameters are {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/docs/api/tenant-api/#get-tenant-information">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/tenant/#get-tenant-information">
+      *      Tenant API - Get Tenant Information</a>
+      */
+     default void get(final String tenantId, final Span span,
+@@ -90,7 +90,7 @@ default void get(final String tenantId, final Span span,
+      *             <li><em>404 Not Found</em> if no matching tenant exists.</li>
+      *             </ul>
+      * @throws NullPointerException if any of the parameters are {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/docs/api/tenant-api/#get-tenant-information">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/tenant/#get-tenant-information">
+      *      Tenant API - Get Tenant Information</a>
+      */
+     void get(X500Principal subjectDn, Handler<AsyncResult<TenantResult<JsonObject>>> resultHandler);
+@@ -118,7 +118,7 @@ default void get(final String tenantId, final Span span,
+      *             <li><em>404 Not Found</em> if no matching tenant exists.</li>
+      *             </ul>
+      * @throws NullPointerException if any of the parameters are {@code null}.
+-     * @see <a href="https://www.eclipse.org/hono/docs/api/tenant-api/#get-tenant-information">
++     * @see <a href="https://www.eclipse.org/hono/docs/api/tenant/#get-tenant-information">
+      *      Tenant API - Get Tenant Information</a>
+      */
+     default void get(final X500Principal subjectDn, final Span span,
+diff --git a/services/device-connection/src/main/java/org/eclipse/hono/deviceconnection/infinispan/Application.java b/services/device-connection/src/main/java/org/eclipse/hono/deviceconnection/infinispan/Application.java
+index 7f0069253d..bc7d06105b 100644
+--- a/services/device-connection/src/main/java/org/eclipse/hono/deviceconnection/infinispan/Application.java
++++ b/services/device-connection/src/main/java/org/eclipse/hono/deviceconnection/infinispan/Application.java
+@@ -33,7 +33,7 @@
+ /**
+  * A Spring Boot application exposing an AMQP based endpoint that implements Hono's Device Connection service.
+  * <p>
+- * The application implements Hono's <a href="https://www.eclipse.org/hono/docs/latest/api/device-connection-api/">
++ * The application implements Hono's <a href="https://www.eclipse.org/hono/docs/api/device-connection/">
+  * Device Connection API</a>.
+  */
+ @ComponentScan("org.eclipse.hono.deviceconnection.infinispan")
+diff --git a/services/device-registry/src/main/java/org/eclipse/hono/deviceregistry/Application.java b/services/device-registry/src/main/java/org/eclipse/hono/deviceregistry/Application.java
+index 898d3a2cbd..0e403537be 100644
+--- a/services/device-registry/src/main/java/org/eclipse/hono/deviceregistry/Application.java
++++ b/services/device-registry/src/main/java/org/eclipse/hono/deviceregistry/Application.java
+@@ -32,8 +32,8 @@
+ /**
+  * A Spring Boot application exposing an AMQP based endpoint that implements Hono's device registry.
+  * <p>
+- * The application implements Hono's <a href="https://www.eclipse.org/hono/docs/api/device-registration-api/">Device Registration API</a>
+- * and <a href="https://www.eclipse.org/hono/docs/api/credentials-api/">Credentials API</a>.
++ * The application implements Hono's <a href="https://www.eclipse.org/hono/docs/api/device-registration/">Device Registration API</a>
++ * and <a href="https://www.eclipse.org/hono/docs/api/credentials/">Credentials API</a>.
+  * </p>
+  */
+ @ComponentScan("org.eclipse.hono.service.auth")
+diff --git a/tests/src/test/java/org/eclipse/hono/tests/LegacyCommandClient.java b/tests/src/test/java/org/eclipse/hono/tests/LegacyCommandClient.java
+index cd3a0f612e..60f14c64fd 100644
+--- a/tests/src/test/java/org/eclipse/hono/tests/LegacyCommandClient.java
++++ b/tests/src/test/java/org/eclipse/hono/tests/LegacyCommandClient.java
+@@ -44,7 +44,7 @@
+      *         If the response has no payload, the future will complete with {@code null}.
+      *         <p>
+      *         Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+-     *         the (error) status code. Status codes are defined at <a href="https://www.eclipse.org/hono/docs/latest/api/command-and-control-api">Command and Control API</a>.
++     *         the (error) status code. Status codes are defined at <a href="https://www.eclipse.org/hono/docs/api/command-and-control">Command and Control API</a>.
+      * @throws NullPointerException if command is {@code null}.
+      * @see RequestResponseClient#setRequestTimeout(long)
+      */
+@@ -65,7 +65,7 @@
+      *         The future will succeed if a response with status 2xx has been received from the device. If the response has no payload, the future will complete with {@code null}.
+      *         <p>
+      *         Otherwise, the future will fail with a {@link ServiceInvocationException} containing
+-     *         the (error) status code. Status codes are defined at <a href="https://www.eclipse.org/hono/docs/latest/api/command-and-control-api">Command and Control API</a>.
++     *         the (error) status code. Status codes are defined at <a href="https://www.eclipse.org/hono/docs/api/command-and-control">Command and Control API</a>.
+      * @throws NullPointerException if command is {@code null}.
+      * @see RequestResponseClient#setRequestTimeout(long)
+      */

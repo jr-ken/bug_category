@@ -1,0 +1,23 @@
+From e27322dc73e97e753fe45b29ab7edfa14346f8e5 Mon Sep 17 00:00:00 2001
+From: Kartheeswaran Kalidass <Kartheeswaran.Kalidass@bosch-si.com>
+Date: Thu, 25 Apr 2019 18:15:56 +0200
+Subject: [PATCH] Add missing field idleTimeoutMillis in constructor used for
+ copying properties.
+
+Signed-off-by: Kartheeswaran Kalidass <Kartheeswaran.Kalidass@bosch-si.com>
+---
+ .../java/org/eclipse/hono/config/ClientConfigProperties.java     | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/core/src/main/java/org/eclipse/hono/config/ClientConfigProperties.java b/core/src/main/java/org/eclipse/hono/config/ClientConfigProperties.java
+index a2f7ca6bf4..edeb9d9a04 100644
+--- a/core/src/main/java/org/eclipse/hono/config/ClientConfigProperties.java
++++ b/core/src/main/java/org/eclipse/hono/config/ClientConfigProperties.java
+@@ -95,6 +95,7 @@ public ClientConfigProperties(final ClientConfigProperties otherProperties) {
+         this.flowLatency = otherProperties.flowLatency;
+         this.host = otherProperties.host;
+         this.hostnameVerificationRequired = otherProperties.hostnameVerificationRequired;
++        this.idleTimeoutMillis = otherProperties.idleTimeoutMillis;
+         this.initialCredits = otherProperties.initialCredits;
+         this.linkEstablishmentTimeout = otherProperties.linkEstablishmentTimeout;
+         this.name = otherProperties.name;
