@@ -1,0 +1,34 @@
+--- run-windows.sh
++++ run-windows.sh
+@@ -1,5 +1,2 @@
+ #!/bin/bash
+-
+-folder=$(echo $PWD | cut -d/ -f-6)
+-
+-docker run -it -v /var/run/docker.sock:/var/run/docker.sock -v $folder:/iotedge microsoft/iotedgedev:latest-linux+docker run -it -v /var/run/docker.sock:/var/run/docker.sock -v c:/temp/iotedge:/iotedge microsoft/iotedgedev--- run-windows.sh
++++ run-windows.sh
+@@ -1,5 +1,5 @@
+ #!/bin/bash
+ 
+-folder=$(echo $PWD | cut -d/ -f-6) | sed -e 's:/c:c\::g' | sed -e 's:/:\\:g'
++folder=$(echo $PWD | cut -d/ -f-6)
+ 
+-docker run -it -v $folder:/home/iotedge/tool microsoft/iotedgedev:latest-linux
++docker run -it -v /var/run/docker.sock:/var/run/docker.sock -v $folder:/iotedge microsoft/iotedgedev:latest-linux--- run-windows.sh
++++ run-windows.sh
+@@ -2,4 +2,4 @@
+ 
+ folder=$(echo $PWD | cut -d/ -f-6) | sed -e 's:/c:c\::g' | sed -e 's:/:\\:g'
+ 
+-docker run -it -v /var/run/docker.sock:/var/run/docker.sock -v $folder:/home/iotedge/tool microsoft/iotedgedev:latest-linux
++docker run -it -v $folder:/home/iotedge/tool microsoft/iotedgedev:latest-linux
+--- run-windows.sh
++++ run-windows.sh
+@@ -1,5 +1,5 @@
+ #!/bin/bash
+ 
+-folder=$(echo $PWD | cut -d/ -f-6 | sed 's,/,//,g')
++folder=$(echo $PWD | cut -d/ -f-6) | sed -e 's:/c:c\::g' | sed -e 's:/:\\:g'
+ 
+-winpty docker run -it -v //var//run//docker.sock://var//run//docker.sock -v $folder://home//iotedge//tool microsoft/iotedgedev:latest-linux
++docker run -it -v /var/run/docker.sock:/var/run/docker.sock -v $folder:/home/iotedge/tool microsoft/iotedgedev:latest-linux

@@ -1,0 +1,26 @@
+--- README.md
++++ README.md
+@@ -45,6 +45,11 @@ KubeEdge is composed of the following components:
+ 
+ <img src="./docs/images/kubeedge_arch.png">
+ 
++## Roadmap
++
++* [Release 1.0 onwards](./docs/getting-started/roadmap.md#release-1.0-onwards)
++* [Release 0.3](./docs/getting-started/roadmap.md#release-0.3) - Plan to Release on 31 May 2019
++
+ ## Usage
+ 
+ * [Prerequisites](./docs/getting-started/usage.md#prerequisites)
+@@ -52,11 +57,6 @@ KubeEdge is composed of the following components:
+ * [Deploy Application](./docs/getting-started/usage.md#deploy-application)
+ * [Run Tests](./docs/getting-started/usage.md#run-tests)
+ 
+-## Roadmap
+-
+-* [Release 1.0 onwards](./docs/getting-started/roadmap.md#release-1.0-onwards)
+-* [Release 0.3](./docs/getting-started/roadmap.md#release-0.3) - Plan to Release on 31 May 2019
+-
+ ## Meeting
+ 
+ Regular Community Meeting: Wednesday at 11:00 Beijing Time (biweekly).

@@ -1,0 +1,18 @@
+--- EndpointInfoServiceImpl.java
++++ EndpointInfoServiceImpl.java
+@@ -181,15 +179,6 @@ public EndpointInfoListResult query(KapuaQuery<EndpointInfo> query)
+ 
+             if (endpointInfoListResult.isEmpty() && query.getScopeId() != null) {
+ 
+-                // First check if there are any endpoint specified at all
+-                EndpointInfoQuery totalQuery = ENDPOINT_INFO_FACTORY.newQuery(query.getScopeId());
+-                long totalCount = EndpointInfoDAO.count(em, totalQuery);
+-
+-                if (totalCount != 0) {
+-                    // if there are endpoints (even not matching the query), return the empty list
+-                    return endpointInfoListResult;
+-                }
+-
+                 KapuaId originalScopeId = query.getScopeId();
+ 
+                 do {
